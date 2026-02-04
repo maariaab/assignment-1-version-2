@@ -5,7 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const connectMongo = require("connect-mongo");
 const MongoStore = connectMongo.MongoStore || connectMongo.default || connectMongo;
-//const MongoStore = require("connect-mongo").MongoStore; // IMPORTANT: use correct import shape
+//const MongoStore = require("connect-mongo").MongoStore; 
 
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
@@ -34,9 +34,6 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 /* end secrets */
-
-
-// ---- Sessions: install BEFORE routes ----
 
 const mongoStore = MongoStore.create({
   mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_database}?retryWrites=true&w=majority`,
@@ -209,7 +206,6 @@ app.get("/members", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-  // Properly destroy session then redirect
   req.session.destroy(() => {
     res.redirect("/");
   });
@@ -224,7 +220,7 @@ app.get("*", (req, res) => {
   res.status(404).send("Page not found - 404");
 });
 
-// ---- Start server AFTER MySQL setup ----
+
 async function startServer() {
   db_utils.printMySQLVersion();
 
@@ -240,54 +236,3 @@ async function startServer() {
 }
 
 startServer().catch((err) => console.error("Failed to start server:", err));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** 
-
-
-
-app.get('/nosql-injection', async (req,res) => {
-	var username = req.query.user;
-
-	if (!username) {
-		res.send(`<h3>no user provided - try /nosql-injection?user=name</h3> <h3>or /nosql-injection?user[$ne]=name</h3>`);
-		return;
-	}
-	console.log("user: "+username);
-
-	const schema = Joi.string().max(20).required();
-	const validationResult = schema.validate(username);
-
-	if (validationResult.error != null) {  
-	   console.log(validationResult.error);
-	   res.send("<h1 style='color:darkred;'>A NoSQL injection attack was detected!!</h1>");
-	   return;
-	}	
-
-	const result = await userCollection.find({username: username}).project({username: 1, password: 1, _id: 1}).toArray();
-
-	console.log("result of no-sql inj" + result);
-
-    res.send(`<h1>Hello ${username}</h1>`);
-});
-
-
-
-
-*/
