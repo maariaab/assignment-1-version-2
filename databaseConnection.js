@@ -36,8 +36,3 @@ const mysqlPool = mysql.createPool(dbConfig);
 
 module.exports = { getDatabase, mysqlPool };
 
-/** 
-var database = mysql.createPool(dbConfig);
-module.exports = database;
-//module.exports = { getDatabase };
-*/

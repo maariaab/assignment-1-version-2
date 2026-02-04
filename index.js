@@ -77,15 +77,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/signup", (req, res) => {
-  const error = req.query.error ? `<p style="color:red;">${req.query.error}</p>` : "";
+  const error = req.query.error ? `<p style="color:black;">${req.query.error}</p>` : "";
   res.send(`
     <h2>Create Account</h2>
-    ${error}
     <form action="/submitUser" method="post">
       <input name="username" type="text" placeholder="username"><br>
       <input name="password" type="password" placeholder="password"><br>
       <button>Submit</button>
     </form>
+    ${error}
   `);
 });
 
@@ -130,20 +130,19 @@ app.post("/submitUser", async (req, res) => {
 
   req.session.username = username;
   req.session.authenticated = true;
-
   res.redirect("/members");
 });
 
 app.get("/login", (req, res) => {
-  const errorMessage = req.query.error ? `<p style="color:red;">${req.query.error}</p>` : "";
+  const errorMessage = req.query.error ? `<p style="color:black;">${req.query.error}</p>` : "";
   res.send(`
-    <h3>Log in</h3>
-    ${errorMessage}
+    <h2>Log in</h2>
     <form action="/loggingin" method="post">
       <input name="username" type="text" placeholder="username"><br>
       <input name="password" type="password" placeholder="password"><br>
       <button>Submit</button>
     </form>
+    ${errorMessage}
   `);
 });
 
