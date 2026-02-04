@@ -25,7 +25,15 @@ async function createUser(postData) {
 	}
 }
 
-
+function escapeHTML(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 async function getUserByUsername(postData) {
   const sql = `
@@ -39,7 +47,11 @@ async function getUserByUsername(postData) {
 
   try {
     const [rows] = await database.query(sql, params);
-    return rows; // array (0 or 1 row)
+    if (rows.length > 0) {
+ 
+      rows[0].username = escapeHTML(rows[0].username);
+    }
+    return rows; 
   } catch (err) {
     console.log("Error finding user by username");
     console.log(err);
